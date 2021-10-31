@@ -18,136 +18,136 @@ let path = require('path');
 
 let clargs = minimist(process.argv);
 
-// //to download html from web axios will provide us browsers functionality
-// let downloadKaPromise = axios.get(clargs.url);
-// downloadKaPromise.then(function(response) {
-//     let html = response.data;
-//     fs.writeFileSync(clargs.dest, html, "utf-8");
-// })
+//to download html from web axios will provide us browsers functionality
+let downloadKaPromise = axios.get(clargs.url);
+downloadKaPromise.then(function(response) {
+    let html = response.data;
+    fs.writeFileSync(clargs.dest, html, "utf-8");
+})
 
 
-//dom manupulation using jsdom
+dom manupulation using jsdom
 
-// fs.readFile(clargs.source, "utf-8", function(err, html) {
-//     let dom = new jsdom.JSDOM(html);
-//     let document = dom.window.document;
+fs.readFile(clargs.source, "utf-8", function(err, html) {
+    let dom = new jsdom.JSDOM(html);
+    let document = dom.window.document;
 
-//     let allStocks = document.querySelectorAll("tr[style]");
-
-
-//     let allStocksfifty = [];
-//     for (let i = 0; i < allStocks.length; i++) {
-
-//         let singleStock = allStocks[i];
-
-//         let individualStock = {
-//             name: '',
-//             BSEPrice: '',
-//             NSEPrice: '',
-//             Note: " ***ALL PRICE(RS) and %(UP OR DOWN)***"
-//         }
+    let allStocks = document.querySelectorAll("tr[style]");
 
 
-//         let stockName = singleStock.querySelector("td.alignleft > a");
+    let allStocksfifty = [];
+    for (let i = 0; i < allStocks.length; i++) {
 
-//         individualStock.name = convert(stockName.textContent);
+        let singleStock = allStocks[i];
 
-//         let Price = singleStock.querySelectorAll("td.alignright");
-
-//         individualStock.BSEPrice = convert(Price[0].textContent);
-//         individualStock.NSEPrice = convert(Price[1].textContent);
-
-
-
-//         allStocksfifty.push(individualStock);
+        let individualStock = {
+            name: '',
+            BSEPrice: '',
+            NSEPrice: '',
+            Note: " ***ALL PRICE(RS) and %(UP OR DOWN)***"
+        }
 
 
-//     }
-//     // now creat the json
-//     let stockKiJson = JSON.stringify(allStocksfifty);
+        let stockName = singleStock.querySelector("td.alignleft > a");
 
-//     fs.writeFileSync(clargs.json, stockKiJson, 'utf-8');
-// });
+        individualStock.name = convert(stockName.textContent);
+
+        let Price = singleStock.querySelectorAll("td.alignright");
+
+        individualStock.BSEPrice = convert(Price[0].textContent);
+        individualStock.NSEPrice = convert(Price[1].textContent);
 
 
 
-
-//now creat the Excel
-// let stockJson = fs.readFileSync("Stocks.json", 'utf-8');
-// let JsoStock = JSON.parse(stockJson);
-// let wb = new Excel.Workbook();
-
-// let myStyle = wb.createStyle({
-//     font: {
-//         bold: true,
-//         color: '#0000FF',
-//         underline: true,
-//         size: 20,
-
-//     },
-
-//     alignment: {
-//         horizontal: ['center']
-//     },
-// });
+        allStocksfifty.push(individualStock);
 
 
-// let myStyle2 = wb.createStyle({
-//     alignment: {
-//         horizontal: 'center',
-//     },
-// });
+    }
+    // now creat the json
+    let stockKiJson = JSON.stringify(allStocksfifty);
 
-// let red_s = wb.createStyle({
-//     font: {
-//         color: "#FF0000",
-//     },
+    fs.writeFileSync(clargs.json, stockKiJson, 'utf-8');
+});
 
-//     alignment: {
-//         horizontal: 'center'
-//     }
-// });
 
-// let green_s = wb.createStyle({
-//     font: {
-//         color: "#00b04c",
-//     },
 
-//     alignment: {
-//         horizontal: 'center'
-//     }
-// })
 
-// for (let i = 0; i < JsoStock.length; i++) {
-//     let sheet = wb.addWorksheet(JsoStock[i].name);
+now creat the Excel
+let stockJson = fs.readFileSync("Stocks.json", 'utf-8');
+let JsoStock = JSON.parse(stockJson);
+let wb = new Excel.Workbook();
 
-//     //cell(start row,start col,end row,end col, merge)
-//     sheet.cell(1, 9, 1, 10, true).string("Stock Name").style(myStyle);
-//     sheet.cell(2, 9, 2, 10, true).string(JsoStock[i].name).style(myStyle2);
+let myStyle = wb.createStyle({
+    font: {
+        bold: true,
+        color: '#0000FF',
+        underline: true,
+        size: 20,
 
-//     sheet.cell(5, 9, 5, 10, true).string("BSE Prices").style(myStyle);
+    },
 
-//     JsoStock[i].BSEPrice = JsoStock[i].BSEPrice.replace(' ', '    ');
-//     if (JsoStock[i].BSEPrice.includes('-')) {
-//         sheet.cell(6, 9, 6, 10, true).string(JsoStock[i].BSEPrice).style(red_s);
-//     } else {
-//         sheet.cell(6, 9, 6, 10, true).string(JsoStock[i].BSEPrice).style(green_s);
-//     }
+    alignment: {
+        horizontal: ['center']
+    },
+});
 
-//     sheet.cell(9, 9, 9, 10, true).string("NSE Prices").style(myStyle);
 
-//     JsoStock[i].NSEPrice = JsoStock[i].NSEPrice.replace(' ', '    ');
-//     if (JsoStock[i].NSEPrice.includes('-')) {
-//         sheet.cell(10, 9, 10, 10, true).string(JsoStock[i].NSEPrice).style(red_s);
-//     } else {
-//         sheet.cell(10, 9, 10, 10, true).string(JsoStock[i].NSEPrice).style(green_s);
-//     }
+let myStyle2 = wb.createStyle({
+    alignment: {
+        horizontal: 'center',
+    },
+});
 
-//     sheet.cell(13, 7, 13, 12, true).string(JsoStock[i].Note).style(myStyle);
+let red_s = wb.createStyle({
+    font: {
+        color: "#FF0000",
+    },
 
-// }
+    alignment: {
+        horizontal: 'center'
+    }
+});
 
-// wb.write(clargs.csv);
+let green_s = wb.createStyle({
+    font: {
+        color: "#00b04c",
+    },
+
+    alignment: {
+        horizontal: 'center'
+    }
+})
+
+for (let i = 0; i < JsoStock.length; i++) {
+    let sheet = wb.addWorksheet(JsoStock[i].name);
+
+    //cell(start row,start col,end row,end col, merge)
+    sheet.cell(1, 9, 1, 10, true).string("Stock Name").style(myStyle);
+    sheet.cell(2, 9, 2, 10, true).string(JsoStock[i].name).style(myStyle2);
+
+    sheet.cell(5, 9, 5, 10, true).string("BSE Prices").style(myStyle);
+
+    JsoStock[i].BSEPrice = JsoStock[i].BSEPrice.replace(' ', '    ');
+    if (JsoStock[i].BSEPrice.includes('-')) {
+        sheet.cell(6, 9, 6, 10, true).string(JsoStock[i].BSEPrice).style(red_s);
+    } else {
+        sheet.cell(6, 9, 6, 10, true).string(JsoStock[i].BSEPrice).style(green_s);
+    }
+
+    sheet.cell(9, 9, 9, 10, true).string("NSE Prices").style(myStyle);
+
+    JsoStock[i].NSEPrice = JsoStock[i].NSEPrice.replace(' ', '    ');
+    if (JsoStock[i].NSEPrice.includes('-')) {
+        sheet.cell(10, 9, 10, 10, true).string(JsoStock[i].NSEPrice).style(red_s);
+    } else {
+        sheet.cell(10, 9, 10, 10, true).string(JsoStock[i].NSEPrice).style(green_s);
+    }
+
+    sheet.cell(13, 7, 13, 12, true).string(JsoStock[i].Note).style(myStyle);
+
+}
+
+wb.write(clargs.csv);
 
 
 //first make folders using path
